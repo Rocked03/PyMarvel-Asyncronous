@@ -238,7 +238,7 @@ class ComicSummary(Summary):
     CommicSummary object
     """
 
-class ComicDate(MarvelObject):
+class ComicDate(DataContainer):
     """
     ComicDate object
     """
