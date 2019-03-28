@@ -13,29 +13,29 @@ from .config import *
 
 class PyMarvelTestCase(unittest.TestCase):
 
-    def setUp(self):
+    async def setUp(self):
         self.m = Marvel(PUBLIC_KEY, PRIVATE_KEY)
         
         #Character
-        self.character_dw = self.m.get_character(1009718)
+        self.character_dw = await self.m.get_character(1009718)
         self.character = self.character_dw.data.result
         
         #Comic
         #TODO: Need a comic with everything
-        self.comic_dw = self.m.get_comic(17731)
+        self.comic_dw = await self.m.get_comic(17731)
         self.comic = self.comic_dw.data.result
                 
         #Creators
         #Grab Stan the Man
-        self.creator_dw = self.m.get_creator(30)
+        self.creator_dw = await self.m.get_creator(30)
         self.creator = self.creator_dw.data.result
 
         #Series
-        self.series_dw = self.m.get_single_series(12429)
+        self.series_dw = await self.m.get_single_series(12429)
         self.series = self.series_dw.data.result
 
         #Story
-        self.story_dw = self.m.get_story(29)
+        self.story_dw = await self.m.get_story(29)
         self.story = self.story_dw.data.result
 
 

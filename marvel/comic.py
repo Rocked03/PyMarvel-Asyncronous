@@ -176,7 +176,7 @@ class Comic(MarvelObject):
         return EventList(self.marvel, self.dict['events'])
         
         
-    def get_creators(self, *args, **kwargs):
+    async def get_creators(self, *args, **kwargs):
         """
         Returns a full CreatorDataWrapper object for this character.
 
@@ -185,9 +185,9 @@ class Comic(MarvelObject):
         :returns:  CreatorDataWrapper -- A new request to API. Contains full results set.
         """
         from .creator import Creator, CreatorDataWrapper
-        return self.get_related_resource(Creator, CreatorDataWrapper, args, kwargs)
+        return await self.get_related_resource(Creator, CreatorDataWrapper, args, kwargs)
 
-    def get_characters(self, *args, **kwargs):
+    async def get_characters(self, *args, **kwargs):
         """
         Returns a full CharacterDataWrapper object for this character.
 
@@ -196,9 +196,9 @@ class Comic(MarvelObject):
         :returns:  CreatorDataWrapper -- A new request to API. Contains full results set.
         """
         from .character import Character, CharacterDataWrapper
-        return self.get_related_resource(Character, CharacterDataWrapper, args, kwargs)
+        return await self.get_related_resource(Character, CharacterDataWrapper, args, kwargs)
 
-    def get_events(self, *args, **kwargs):
+    async def get_events(self, *args, **kwargs):
         """
         Returns a full EventDataWrapper object this character.
 
@@ -207,9 +207,9 @@ class Comic(MarvelObject):
         :returns:  EventDataWrapper -- A new request to API. Contains full results set.
         """
         from .event import Event, EventDataWrapper
-        return self.get_related_resource(Event, EventDataWrapper, args, kwargs)
+        return await self.get_related_resource(Event, EventDataWrapper, args, kwargs)
         
-    def get_stories(self, *args, **kwargs):
+    async def get_stories(self, *args, **kwargs):
         """
         Returns a full StoryDataWrapper object this comic.
 
@@ -218,7 +218,7 @@ class Comic(MarvelObject):
         :returns:  StoriesDataWrapper -- A new request to API. Contains full results set.
         """
         from .story import Story, StoryDataWrapper
-        return self.get_related_resource(Story, StoryDataWrapper, args, kwargs)
+        return await self.get_related_resource(Story, StoryDataWrapper, args, kwargs)
 
 
 class ComicList(List):

@@ -55,7 +55,7 @@ class MarvelObject(object):
             items.append(_Class(_self.marvel, item))
         return items
         
-    def get_related_resource(_self, _Class, _ClassDataWrapper, *args, **kwargs):
+    async def get_related_resource(_self, _Class, _ClassDataWrapper, *args, **kwargs):
         """
         Takes a related resource Class 
         and returns the related resource DataWrapper.
@@ -73,7 +73,7 @@ class MarvelObject(object):
         :returns:  DataWrapper -- DataWrapper for requested Resource
         """
         url = "%s/%s/%s" % (_self.resource_url(), _self.id, _Class.resource_url())
-        response = json.loads(_self.marvel._call(url, _self.marvel._params(kwargs)).text)
+        response = await _self.marvel._call(url, _self.marvel._params(kwargs))
         return _ClassDataWrapper(_self.marvel, response)
         
 class DataWrapper(MarvelObject):

@@ -8,7 +8,7 @@ import json
 import hashlib
 import datetime
 
-import requests
+import aiohttp
 
 from .character import Character, CharacterDataWrapper
 from .comic import ComicDataWrapper, Comic
@@ -35,7 +35,7 @@ class Marvel(object):
     def _endpoint(self):
         return "http://gateway.marvel.com/%s/public/" % (DEFAULT_API_VERSION)
 
-    def _call(self, resource_url, params=None):
+    async def _call(self, resource_url, params=None):
         """
         Calls the Marvel API endpoint
 
@@ -52,7 +52,11 @@ class Marvel(object):
             url += "?%s&%s" % (params, self._auth())
         else:
             url += "?%s" % self._auth()
-        return requests.get(url)
+
+        async with aiohttp.ClientSession() as cs:
+            async with cs.get(url) as r:
+                urlfinal = await r.json()
+        return urlfinal
 
     def _params(self, params):
         """
@@ -64,7 +68,7 @@ class Marvel(object):
         
         :returns:  str -- URL encoded query parameters
         """
-        return urllib.urlencode(params)
+        return urllib.parse.urlencode(params)
 
     def _auth(self):
         """
@@ -73,7 +77,7 @@ class Marvel(object):
         :returns:  str -- URL encoded query parameters containing "ts", "apikey", and "hash"
         """
         ts = datetime.datetime.now().strftime("%Y-%m-%d%H:%M:%S")
-        hash_string = hashlib.md5("%s%s%s" % (ts, self.private_key, self.public_key)).hexdigest()
+        hash_string = hashlib.md5(("%s%s%s" % (ts, self.private_key, self.public_key)).encode('utf-8')).hexdigest()
         return "ts=%s&apikey=%s&hash=%s" % (ts, self.public_key, hash_string)
 
 
@@ -81,7 +85,7 @@ class Marvel(object):
 
 
     #public methods
-    def get_character(self, id):
+    async def get_character(self, id):
         """Fetches a single character by id.
 
         get /v1/public/characters
@@ -100,10 +104,10 @@ class Marvel(object):
 
         """
         url = "%s/%s" % (Character.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return CharacterDataWrapper(self, response)
         
-    def get_characters(self, *args, **kwargs):
+    async def get_characters(self, *args, **kwargs):
         """Fetches lists of comic characters with optional filters.
 
         get /v1/public/characters/{characterId}
@@ -124,10 +128,10 @@ class Marvel(object):
         
         """
         #pass url string and params string to _call
-        response = json.loads(self._call(Character.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Character.resource_url(), self._params(kwargs))
         return CharacterDataWrapper(self, response, kwargs)
 
-    def get_comic(self, id):
+    async def get_comic(self, id):
         """Fetches a single comic by id.
         
         get /v1/public/comics/{comicId}
@@ -146,10 +150,10 @@ class Marvel(object):
         """
         
         url = "%s/%s" % (Comic.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return ComicDataWrapper(self, response)
                 
-    def get_comics(self, *args, **kwargs):
+    async def get_comics(self, *args, **kwargs):
         """
         Fetches list of comics.
 
@@ -166,11 +170,11 @@ class Marvel(object):
 
         """
 
-        response = json.loads(self._call(Comic.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Comic.resource_url(), self._params(kwargs))
         return ComicDataWrapper(self, response)
         
         
-    def get_creator(self, id):
+    async def get_creator(self, id):
         """Fetches a single creator by id.
 
         get /v1/public/creators/{creatorId}
@@ -189,11 +193,11 @@ class Marvel(object):
         """
 
         url = "%s/%s" % (Creator.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return CreatorDataWrapper(self, response)
 
         
-    def get_creators(self, *args, **kwargs):
+    async def get_creators(self, *args, **kwargs):
         """Fetches lists of creators.
         
         get /v1/public/creators
@@ -208,11 +212,11 @@ class Marvel(object):
         Alvin Lee
         """
         
-        response = json.loads(self._call(Creator.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Creator.resource_url(), self._params(kwargs))
         return CreatorDataWrapper(self, response)
         
         
-    def get_event(self, id):
+    async def get_event(self, id):
         """Fetches a single event by id.
 
         get /v1/public/event/{eventId}
@@ -229,11 +233,11 @@ class Marvel(object):
         """
 
         url = "%s/%s" % (Event.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return EventDataWrapper(self, response)
         
         
-    def get_events(self, *args, **kwargs):
+    async def get_events(self, *args, **kwargs):
         """Fetches lists of events.
 
         get /v1/public/events
@@ -252,11 +256,11 @@ class Marvel(object):
         Age of Apocalypse
         """
 
-        response = json.loads(self._call(Event.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Event.resource_url(), self._params(kwargs))
         return EventDataWrapper(self, response)
         
         
-    def get_single_series(self, id):
+    async def get_single_series(self, id):
         """Fetches a single comic series by id.
 
         get /v1/public/series/{seriesId}
@@ -273,11 +277,11 @@ class Marvel(object):
         """
 
         url = "%s/%s" % (Series.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return SeriesDataWrapper(self, response)
 
 
-    def get_series(self, *args, **kwargs):
+    async def get_series(self, *args, **kwargs):
         """Fetches lists of events.
 
         get /v1/public/events
@@ -295,10 +299,10 @@ class Marvel(object):
         5 Ronin (2010)
         """
 
-        response = json.loads(self._call(Series.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Series.resource_url(), self._params(kwargs))
         return SeriesDataWrapper(self, response)
 
-    def get_story(self, id):
+    async def get_story(self, id):
         """Fetches a single story by id.
 
         get /v1/public/stories/{storyId}
@@ -315,11 +319,11 @@ class Marvel(object):
         """
 
         url = "%s/%s" % (Story.resource_url(), id)
-        response = json.loads(self._call(url).text)
+        response = await self._call(url)
         return StoryDataWrapper(self, response)
 
 
-    def get_stories(self, *args, **kwargs):
+    async def get_stories(self, *args, **kwargs):
         """Fetches lists of stories.
 
         get /v1/public/stories
@@ -338,5 +342,5 @@ class Marvel(object):
         Cover #477
         """
 
-        response = json.loads(self._call(Story.resource_url(), self._params(kwargs)).text)
+        response = await self._call(Story.resource_url(), self._params(kwargs))
         return StoryDataWrapper(self, response)
