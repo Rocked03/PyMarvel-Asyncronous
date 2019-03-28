@@ -19,11 +19,7 @@ PyMarvel takes care of authorization and provides convenient methods calling the
 Installation
 ============
 
-    pip install PyMarvel
-
-or
-
-    easy_install PyMarvel
+    pip install -U git+https://github.com/Rocked03/PyMarvel#egg=PyMarvel
 
 Python Package Index
 
