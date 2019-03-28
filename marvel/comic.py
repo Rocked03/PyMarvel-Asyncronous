@@ -19,6 +19,8 @@ class ComicDataWrapper(DataWrapper):
     """
     @property
     def data(self):
+        print(self)
+        print(self.dict)
         return ComicDataContainer(self.marvel, self.dict['data'])
 
 class ComicDataContainer(DataContainer):
