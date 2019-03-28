@@ -134,7 +134,7 @@ class Character(MarvelObject):
         return await self.get_related_resource(Comic, ComicDataWrapper, args, kwargs)
         
     
-    def get_events(self, *args, **kwargs):
+    async def get_events(self, *args, **kwargs):
         """
         Returns a full EventDataWrapper object this character.
 
@@ -145,7 +145,7 @@ class Character(MarvelObject):
         from .event import Event, EventDataWrapper
         return await self.get_related_resource(Event, EventDataWrapper, args, kwargs)
 
-    def get_series(self, *args, **kwargs):
+    async def get_series(self, *args, **kwargs):
         """
         Returns a full SeriesDataWrapper object this character.
 
@@ -156,7 +156,7 @@ class Character(MarvelObject):
         from .series import Series, SeriesDataWrapper
         return await self.get_related_resource(Series, SeriesDataWrapper, args, kwargs)
 
-    def get_stories(self, *args, **kwargs):
+    async def get_stories(self, *args, **kwargs):
         """
         Returns a full StoryDataWrapper object this character.
 
