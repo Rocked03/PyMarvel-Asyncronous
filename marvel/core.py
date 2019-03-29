@@ -192,7 +192,7 @@ class DataContainer(MarvelObject):
         :returns: datetime
         """
         #Hacked off %z timezone because reasons
-        from datetime import datetime 
+        from datetime import datetime
         return datetime.strptime(_str[:-6], '%Y-%m-%dT%H:%M:%S')
         
         
