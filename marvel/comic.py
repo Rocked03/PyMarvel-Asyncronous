@@ -240,7 +240,7 @@ class ComicSummary(Summary):
 
 class ComicDate(DataContainer):
     """
-    ComicDate object
+    ComicDate object 
     """
     @property
     def type(self):
