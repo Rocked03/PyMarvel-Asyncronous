@@ -54,8 +54,12 @@ class Marvel(object):
         else:
             url += "?%s" % self._auth()
 
+        headers = {
+            "cache-control": "max-age=0",
+        }
+
         async with aiohttp.ClientSession() as cs:
-            async with cs.get(url) as r:
+            async with cs.get(url, headers=headers) as r:
                 urlfinal = await r.json()
         return urlfinal
 
