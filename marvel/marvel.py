@@ -34,7 +34,7 @@ class Marvel(object):
         self.info = "This is a fork created by Rocked03 of the original PyMarvel library. "
         
     def _endpoint(self):
-        return "http://gateway.marvel.com/%s/public/" % (DEFAULT_API_VERSION)
+        return "https://gateway.marvel.com/%s/public/" % (DEFAULT_API_VERSION)
 
     async def _call(self, resource_url, params=None):
         """

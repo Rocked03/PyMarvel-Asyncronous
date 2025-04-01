@@ -115,11 +115,11 @@ or even:
 
 would be the equivalent to calling::
 
-    http://gateway.marvel.com/v1/public/series?characters=100971
-    http://gateway.marvel.com/v1/public/series/15276/characters
-    http://gateway.marvel.com/v1/public/characters/1009351/comics
-    http://gateway.marvel.com/v1/public/comics/50372/creators
-    http://gateway.marvel.com/v1/public/creators/4600/events
+    https://gateway.marvel.com/v1/public/series?characters=100971
+    https://gateway.marvel.com/v1/public/series/15276/characters
+    https://gateway.marvel.com/v1/public/characters/1009351/comics
+    https://gateway.marvel.com/v1/public/comics/50372/creators
+    https://gateway.marvel.com/v1/public/creators/4600/events
     
 
 Pagination
